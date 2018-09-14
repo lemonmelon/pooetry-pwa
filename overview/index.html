@@ -1,26 +1,98 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                font-family: sans-serif;
+                margin-top: 38px;
+            }
+            header {
+                background: #0097e6;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                color: white;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
+            header > * {
+                padding: 10px;
+            }
+            header h1 {
+                font-size: 1em;
+                margin: 0;
+            }
+            header a {
+                color: inherit;
+                font-size: 0.8em;
+            }
+            .loading-indicator:before {
+                content: "Loading...";
+            }
+            .toilet {
+                display: block;
+                text-decoration: inherit;
+                color: inherit;
+                border-bottom: 1px solid rgb(100,100,100);
+                padding: 15px;
+                transition: background 0.4s;
+            }
+            .toilet:hover {
+                background: rgb(240,240,240);
+            }
+            .toilet h1 {
+                font-size: 1.2em;
+                margin: 0;
+                display: inline;
+            }
+            .toilet h5 {
+                font-size: 1em;
+                font-weight: normal;
+                color: rgb(120,120,120);
+                margin: 0;
+                display: inline-block;
+                margin-left: 10px;
+            }
+        </style>
+    </head>
     <body>
-		<p>
-			du er logget ind som <span id="usernameText"></span>
-		</p>
-		
-		<script>
-			var data = JSON.parse(localStorage.getItem("userSettings"));
-			var usernameText = document.querySelector("#usernameText");
-			usernameText.innerText = data.username;
-		</script>
-		
+        <header>
+            <h1>Toilets nearby</h1>
+            <a href="/toilet/create/">Create toilet</a>
+        </header>
+        <section class="toilet-list">
+            <div class="loading-indicator"></div>
+        </section>
         Todo:
         <ul>
             <li>
-                Vis mulighed for at oprette et toilet. Link til /toilet/create/.
-            </li>
-            <li>
-                Hent geolokation.
-                Vis liste over toiletter i nærheden.
-                Når man vælger et toilet går man til toiletoplevelsen: /toilet/?id={toiletId}
+                Vis liste over toiletter i nærheden. (hent fra api)
             </li>
         </ul>
+        <script>
+            //TODO: request nearest toilets by coords. Get back list of { id, name, distance }.
+            navigator.geolocation.getCurrentPosition(function(position) {
+                console.log("pos", position.coords.latitude, position.coords.longitude);
+            });
+
+            var toiletList = document.querySelector(".toilet-list");
+
+            toiletList.innerHTML = [
+                { id: "1234", name: "Busken derude", distance: "12 m" },
+                { id: "4321", name: "Laurids' toilet", distance: "120 m" },
+                { id: "5231", name: "Armandos toilet", distance: "420 m" }
+            ].map((toilet) => {
+                return `
+                <a class="toilet" href="/toilet/?id=${toilet.id}">
+                    <h1>${toilet.name}</h1>
+                    <h5>${toilet.distance}</h5>
+                </a>
+                `;
+            }).join("");
+        </script>
     </body>
 </html>
