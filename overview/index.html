@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
     <body>
+		<p>
+			du er logget ind som <span id="usernameText"></span>
+		</p>
+		
+		<script>
+			var data = JSON.parse(localStorage.getItem("userSettings"));
+			var usernameText = document.querySelector("#usernameText");
+			usernameText.innerText = data.username;
+		</script>
+		
         Todo:
         <ul>
             <li>
