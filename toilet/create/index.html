@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html>
     <body>
-        Todo:
-        <ul>
-            <li>
+		<label>
+			Toilettets navn: <input type="text" name="toiletName">
+		</label>
+		<button>Opret</button>
+	
+		<script>
+		var button = document.querySelector("button");
+		var toiletNameField = document.querySelector("input[name=toiletName]");
+		button.addEventListener("click",function(){
+			
+			var toiletName = toiletNameField.value;
+			
+			navigator.geolocation.getCurrentPosition(function(position) {
+				fetch("0.0.0.0:1234/toilets", {
+					method: "POST",
+					body: JSON.stringify({
+						name: toiletName,
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude
+					}),
+					headers: {"Content-Type":"application/json"}
+				}).then (function(response){
+					var data = response.json();
+					document.location.pathname = "/toilet/?id=" + data.id;
+				}).catch (function(error){
+					console.error ("Failed to create toilet '" + toiletName + "'", error);
+				});
+		
+			});
+			
+		})
+		</script>
+	
+	
+	
+		<div>
+        	Todo:
+        	<ul>
+            	<li>
                 Oprettelse af toilet (udfyld formular, opret, send tilbage til oversigt /overview/)
-            </li>
-        </ul>
+            	</li>
+        	</ul>
+		</div>
     </body>
 </html>
