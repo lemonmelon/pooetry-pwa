@@ -67,32 +67,23 @@
         <section class="toilet-list">
             <div class="loading-indicator"></div>
         </section>
-        Todo:
-        <ul>
-            <li>
-                Vis liste over toiletter i nærheden. (hent fra api)
-            </li>
-        </ul>
         <script>
-            //TODO: request nearest toilets by coords. Get back list of { id, name, distance }.
-            navigator.geolocation.getCurrentPosition(function(position) {
-                console.log("pos", position.coords.latitude, position.coords.longitude);
-            });
-
             var toiletList = document.querySelector(".toilet-list");
-
-            toiletList.innerHTML = [
-                { id: "1234", name: "Busken derude", distance: "12 m" },
-                { id: "4321", name: "Laurids' toilet", distance: "120 m" },
-                { id: "5231", name: "Armandos toilet", distance: "420 m" }
-            ].map((toilet) => {
-                return `
-                <a class="toilet" href="/toilet/?id=${toilet.id}">
-                    <h1>${toilet.name}</h1>
-                    <h5>${toilet.distance}</h5>
-                </a>
-                `;
-            }).join("");
+            
+            navigator.geolocation.getCurrentPosition(function(position) {
+                fetch("http://localhost:5281/toilets?longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude).then(function(response) {
+                    response.json().then((data) => {
+                        toiletList.innerHTML = data.map((toilet) => {
+                            return `
+                            <a class="toilet" href="/toilet/?id=${toilet.id}">
+                                <h1>${toilet.name}</h1>
+                                <h5>${toilet.distance.toFixed(0)} m</h5>
+                            </a>
+                            `;
+                        }).join("");
+                    });
+                });
+            });
         </script>
     </body>
 </html>
