@@ -26,16 +26,12 @@ body {
 		color: inherit;
 		font-size: 0.8em;
 	}
-	label {
+	label{
 		display: block;
 		text-decoration: inherit;
 		color: inherit;
 		border-bottom: 1px solid rgb(100,100,100);
 		padding: 15px;
-		transition: background 0.4s;
-	}
-	label:hover{
-		background: rgb(240,240,240);
 	}
 	.label-text {
 		width: 100px;
@@ -47,15 +43,20 @@ body {
 	}
 	button{
 		font-size: 1em;
+		font-weight: bold;
 		width: 100%;
-		background-color: white;
 		border-width: 0;
 		padding: 10px;
-		border-top: 1px solid rgb(100,100,100);
-		border-bottom: 1px solid rgb(100,100,100);
+		color: white;
+		background-color: #0097e6;
 		transition: background 0.4s;
 	}
 	button:hover{
-		background: rgb(240,240,240);
+		background: rgb(0, 168, 255);
 		cursor: pointer;
+	}
+	.font-preview{
+		height: 60px;
+		display:flex;
+		align-items: center;
 	}

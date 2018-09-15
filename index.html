@@ -27,9 +27,8 @@
 		</label>
 		
 		<div class="font-preview">
-			<span id="usernameDisplay">who</span><span id="fontPreviewText"> is on the toilet?</span>
+			<span id="fontPreviewText">who is on the toilet?</span>
 		</div>
-		
 			
 		<button id="button">
 			Get poopin' !
@@ -54,7 +53,6 @@
 				localStorage.setItem("userSettings", JSON.stringify({
 					username: usernameField.value, 
 					font: fontSelector.value
-					
 				}));
 					location.pathname = "/overview/"
 				}
@@ -76,14 +74,11 @@
 				var username = usernameField.value;
 				
 				if(username){
-					usernameDisplay.innerText = username;
-					fontPreviewText.innerText = " is on the toilet";
+					fontPreviewText.innerText = username + " is on the toilet";
 				}
 				else{
-					usernameDisplay.innerText = "Who";
-					fontPreviewText.innerText = " is on the toilet?";
+					fontPreviewText.innerText = "who is on the toilet?";
 				}
-				
 			})
 			
 			fontSelector.addEventListener("change", function(){
