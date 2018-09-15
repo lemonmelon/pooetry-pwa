@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
     <body>
-        Todo:
-        <ul>
-            <li>
-                Læs `id` fra URL'en og hent og vis toiletoplevelsen for det toilet.
-            </li>
-        </ul>
+        <header>
+            <h1></h1>
+        </header>
+        <section class="toilet-content">
+            <div class="loading-indicator">Loading...</div>
+        </section>
+        <script>
+            var heading = document.querySelector("header h1");
+            var toiletContent = document.querySelector(".toilet-content");
+            
+            var id = document.location.search.match(/[?&]id=([^&]+)/)[1];
+
+            alert("id" + id);
+
+            //fetch("http://localhost:5281/toilet")
+        </script>
     </body>
 </html>
