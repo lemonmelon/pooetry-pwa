@@ -3,22 +3,12 @@
 	<head>
 		<meta charset="UTF8">
 		<link href="https://fonts.googleapis.com/css?family=Caveat|Gamja+Flower|Indie+Flower|Neucha|Patrick+Hand|Permanent+Marker" rel="stylesheet"> 
-		<style>
-			label {
-				display: block;
-			}
-			.label-text {
-				width: 100px;
-				display: inline-block;
-			}
-			.font-preview{
-				padding: 15px;
-				font-size: 2em;
-			}
-			
-		</style>
+		<link href="/style.css" rel="stylesheet" type="text/css">
 	</head>
     <body>
+		<header>
+            <h1>Sign up</h1>
+        </header>
 		<label>
 			<span class="label-text">Username </span>
 			<input type="text" name="username">
@@ -26,19 +16,18 @@
 		<label>
 			<span class="label-text">Font </span>
 			<select name="font-selector">
-				<option value="Gamja Flower"></option>
-				<option value="Times New Roman"></option>
-				<option value="Indie Flower"></option>
-				<option value="Permanent Marker"></option>
-				<option value="Caveat"></option>
-				<option value="Patrick Hand"></option>
-				<option value="Neucha"></option>
+				<option value="Permanent Marker" class="fontOption"></option>
+				<option value="Gamja Flower" class="fontOption"></option>
+				<option value="Indie Flower" class="fontOption"></option>
+				<option value="Caveat" class="fontOption"></option>
+				<option value="Patrick Hand" class="fontOption"></option>
+				<option value="Neucha" class="fontOption"></option>
 				
 			</select>
 		</label>
 		
 		<div class="font-preview">
-			<span id="usernameDisplay"></span> is on the toilet
+			<span id="usernameDisplay">who</span><span id="fontPreviewText"> is on the toilet?</span>
 		</div>
 		
 			
@@ -50,22 +39,32 @@
 			if(localStorage.getItem("userSettings")){
 				location.pathname = "/overview/";	
 			}
-		
+			
 			var knap = document.querySelector("#button");
 			var usernameField = document.querySelector("input[name=username]");
 			var fontSelector = document.querySelector("select[name=font-selector]");
 			var usernameDisplay = document.querySelector("#usernameDisplay");
 			var fontPreview = document.querySelector(".font-preview");
+			var fontPreviewText = document.querySelector("#fontPreviewText");
 			
 			knap.addEventListener("click", function(){
+				var username = usernameField.value;
+				
+				if(username){
 				localStorage.setItem("userSettings", JSON.stringify({
 					username: usernameField.value, 
 					font: fontSelector.value
+					
 				}));
-				alert("Hey den er gemt");
-				location.pathname = "/overview/";
+					location.pathname = "/overview/"
+				}
+				else{
+					alert("Please select a name");
+				}
 				
 			});
+			
+			fontPreview.setAttribute("style", "font-family:" + fontSelector[0].value)
 			
 			for(i = 0; i < fontSelector.length ;i++){
 				var option = fontSelector[i];
@@ -74,12 +73,23 @@
 			}
 			
 			usernameField.addEventListener("keyup", function(){
-				usernameDisplay.innerText = usernameField.value;
+				var username = usernameField.value;
+				
+				if(username){
+					usernameDisplay.innerText = username;
+					fontPreviewText.innerText = " is on the toilet";
+				}
+				else{
+					usernameDisplay.innerText = "Who";
+					fontPreviewText.innerText = " is on the toilet?";
+				}
+				
 			})
 			
 			fontSelector.addEventListener("change", function(){
 				fontPreview.setAttribute("style","font-family: '" + fontSelector.value + "';");
 			})
+
 		</script>
 	
         <div>
