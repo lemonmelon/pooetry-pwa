@@ -13,7 +13,7 @@
             
             var id = document.location.search.match(/[?&]id=([^&]+)/)[1];
 
-            fetch("http://localhost:5281/toilets/" + id).then(function(response) {
+            fetch("https://pooetry-api.herokuapp.com/toilets/" + id).then(function(response) {
                 return response.json();
             }).then(function(data) {
                 heading.innerText = data.name;

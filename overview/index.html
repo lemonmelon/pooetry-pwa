@@ -71,7 +71,7 @@
             var toiletList = document.querySelector(".toilet-list");
             
             navigator.geolocation.getCurrentPosition(function(position) {
-                fetch("http://localhost:5281/toilets?longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude).then(function(response) {
+                fetch("https://pooetry-api.herokuapp.com/toilets?longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude).then(function(response) {
                     return response.json();
                 }).then((data) => {
                     toiletList.innerHTML = data.map((toilet) => {
