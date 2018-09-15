@@ -72,16 +72,18 @@
             
             navigator.geolocation.getCurrentPosition(function(position) {
                 fetch("http://localhost:5281/toilets?longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude).then(function(response) {
-                    response.json().then((data) => {
-                        toiletList.innerHTML = data.map((toilet) => {
-                            return `
-                            <a class="toilet" href="/toilet/?id=${toilet.id}">
-                                <h1>${toilet.name}</h1>
-                                <h5>${toilet.distance.toFixed(0)} m</h5>
-                            </a>
-                            `;
-                        }).join("");
-                    });
+                    return response.json();
+                }).then((data) => {
+                    toiletList.innerHTML = data.map((toilet) => {
+                        return `
+                        <a class="toilet" href="/toilet/?id=${toilet.id}">
+                            <h1>${toilet.name}</h1>
+                            <h5>${toilet.distance.toFixed(0)} m</h5>
+                        </a>
+                        `;
+                    }).join("");
+                }).catch(function(error) {
+                    console.error("Failed to list toilets", error);
                 });
             });
         </script>
