@@ -2,22 +2,45 @@
 <html>
     <body>
 		<label>
-			Toilettets navn: <input type="text" name="toiletName">
+			Name the toilet: <br> <input type="text" name="toiletName">
 		</label>
-		<button>Opret</button>
-	
+		
+		<form>
+          <p>This toilet is:</p>
+          <div>
+            <input type="radio" id="categoryChoice1"
+             name="category" value="public">
+            <label for="contactChoice1">Public</label>
+
+            <input type="radio" id="categoryChoice2"
+             name="contact" value="private">
+            <label for="contactChoice2">Private</label>
+          </div>
+        </form>
+		
+		<br>
+		
+		<button>Create</button>
+	    
+	    <pre id="log">
+        </pre>
 		<script>
 		var button = document.querySelector("button");
 		var toiletNameField = document.querySelector("input[name=toiletName]");
+		var toiletCategoryForm = document.querySelector("form");
+		var toiletCategoryLog = document.querySelector("#log");
 		button.addEventListener("click",function(){
 			
 			var toiletName = toiletNameField.value;
+			var toiletCategory = toiletCategoryForm.value;
+			var toiletCatLog = toiletCategoryLog.value;
 			
 			navigator.geolocation.getCurrentPosition(function(position) {
 				fetch("0.0.0.0:1234/toilets", {
 					method: "POST",
 					body: JSON.stringify({
 						name: toiletName,
+						category: toiletCategory,
 						latitude: position.coords.latitude,
 						longitude: position.coords.longitude
 					}),
@@ -36,11 +59,19 @@
 	
 	
 	
-		<div>
+		<div><br>
         	Todo:
         	<ul>
             	<li>
                 Oprettelse af toilet (udfyld formular, opret, send tilbage til oversigt /overview/)
+            	</li>
+            	
+            	<li>
+            	NIELS: Tjek at public-private-form er sat rigtigt op, og at vaerdien bliver stringifyed sammen med navn og geolokation<br> - Hvorfor kan man vaelge begge samtidig? Det er da en radio button!
+            	</li>
+            	
+            	<li>
+            	Hvis 'private' er valgt som kategori: viderestil til side, hvor password oprettes (eller synliggoer password-tekstfelt paa /create/)
             	</li>
         	</ul>
 		</div>
