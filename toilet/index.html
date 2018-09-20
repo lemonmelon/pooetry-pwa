@@ -1,11 +1,138 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Caveat|Gamja+Flower|Indie+Flower|Neucha|Patrick+Hand|Permanent+Marker" rel="stylesheet"> 
+        <link href="/style.css" rel="stylesheet" type="text/css">
+        <style>
+            body {
+                background: rgb(240,240,240);
+            }
+            canvas {
+                width: 100%;
+            }
+            #write-box {
+                background: white;
+                margin: 10px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                border: 1px solid black;
+                text-align: center;
+            }
+            #write-box input {
+                margin: 10px;
+                box-sizing: border-box;
+                width: calc(100% - 20px);
+            }
+            #write-box-preview {
+                min-height: 50px;
+                font-size: 24px;
+            }
+        </style>
+    </head>
     <body>
-        Todo:
-        <ul>
-            <li>
-                Læs `id` fra URL'en og hent og vis toiletoplevelsen for det toilet.
-            </li>
-        </ul>
+        <header>
+            <h1></h1>
+            <a href="#" id="write-link">Write on the wall</a>
+        </header>
+        <div id="write-box" style="display: none;">
+            <input type="text" name="writing">
+            <div id="write-box-preview">...</div>
+            <button>Place on wall</button>
+        </div>
+        <section class="toilet-content">
+            <div class="loading-indicator">Loading...</div>
+        </section>
+        <script>
+            var heading = document.querySelector("header h1");
+            var toiletContent = document.querySelector(".toilet-content");
+            var writeLink = document.querySelector("#write-link");
+            var writeBox = document.querySelector("#write-box");
+            var writeBoxInput = document.querySelector("#write-box input");
+            var writeBoxPreview = document.querySelector("#write-box-preview");
+            var writeBoxButton = writeBox.querySelector("button");
+            
+            var id = document.location.search.match(/[?&]id=([^&]+)/)[1];
+
+            fetch("https://pooetry-api.herokuapp.com/toilets/" + id).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                heading.innerText = data.name;
+                toiletContent.innerHTML = `
+                    <canvas width="750px" height="${1200 + (200 * data.posts.length)}px"></canvas>
+                `;
+                let canvas = toiletContent.querySelector("canvas");
+                renderPosts(data.posts, canvas);
+            }).catch(function(error) {
+                console.error("Failed to load toilet", error);
+            });
+
+            function renderPosts(posts, canvas) {
+                var context = canvas.getContext("2d");
+                context.font = '42px Permanent Marker';
+                context.fillText("Hello world", 10, 52);
+                posts.forEach(function(post) {
+                    context.drawImage(new Uint8ClampedArray(post.data), post.x, post.y);
+                });
+            }
+
+            writeLink.addEventListener("click", function(e) {
+                e.preventDefault();
+
+                writeBox.setAttribute("style", "display: block");
+                writeBoxInput.focus();
+
+                return false;
+            });
+
+            writeBox.addEventListener("keyup", function(e) {
+                if(writeBoxInput.value == "") {
+                    writeBoxPreview.innerText = "...";
+                    return;
+                }
+                writeBoxPreview.innerText = writeBoxInput.value;
+            });
+
+            var userSettings = JSON.parse(localStorage.getItem("userSettings"));
+            writeBoxPreview.setAttribute("style", "font-family: '" + userSettings.font + "';");
+
+            if(writeBoxInput.value !== "") {
+                writeBoxPreview.innerText = writeBoxInput.value;
+            }
+
+            writeBoxButton.addEventListener("click", function(e) {
+                let text = writeBoxInput.value;
+
+                writeBox.setAttribute("style", "display: none;");
+                writeBoxInput.value = "";
+                writeBoxPreview.innerText = "...";
+                
+                var canvas = toiletContent.querySelector("canvas");
+                var context = canvas.getContext("2d");
+                context.font = '42px ' + userSettings.font;
+
+                let textWidth = context.measureText(text).width;
+
+                let lines = Math.ceil(textWidth / 750); //intentionally using 700 to aggressively linebreak
+                let lineBreakCharacterOffset = Math.round(text.length / lines);
+                
+                let textLines = Array(lines)
+                                    .fill(0)
+                                    .map((_, i) => text.lastIndexOf(" ", i * lineBreakCharacterOffset))
+                                    .map((startOffset, i, list) => {
+                                        startOffset += 1;
+                                        if(i < lines - 1) {
+                                            return text.slice(startOffset, list[i + 1]);
+                                        }
+                                        return text.slice(startOffset);
+                                    });
+                
+                let y = Math.round(Math.random() * 1100);
+                textLines.forEach((line, i) => {
+                    context.fillText(line, 10, Math.round(y + i * 52));
+                });
+            });
+        </script>
     </body>
 </html>

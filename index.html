@@ -1,21 +1,109 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="UTF8">
+		<link href="https://fonts.googleapis.com/css?family=Caveat|Gamja+Flower|Indie+Flower|Neucha|Patrick+Hand|Permanent+Marker" rel="stylesheet"> 
+		<link href="/style.css" rel="stylesheet" type="text/css">
+	</head>
     <body>
-        Todo:
-        <ul>
-            <li>
-                Hvis du ikke har en bruger
-                <ol>
-                    <li>Skriv navn: hvad skal vi kalde dig?</li>
-                    <li>Vælg skrifttype du vil bruge</li>
-                </ol>
-            </li>
-            <li>
-                Hvis du har en bruger
-                <ol>
-                    <li>Send videre til oversigts-siden /overview/</li>
-                </ol>
-            </li>
-        </ul>
+		<header>
+            <h1>Sign up</h1>
+        </header>
+		<label>
+			<span class="label-text">Username </span>
+			<input type="text" name="username">
+		</label>
+		<label>
+			<span class="label-text">Font </span>
+			<select name="font-selector">
+				<option value="Permanent Marker" class="fontOption"></option>
+				<option value="Gamja Flower" class="fontOption"></option>
+				<option value="Indie Flower" class="fontOption"></option>
+				<option value="Caveat" class="fontOption"></option>
+				<option value="Patrick Hand" class="fontOption"></option>
+				<option value="Neucha" class="fontOption"></option>
+				
+			</select>
+		</label>
+		
+		<div class="font-preview">
+			<span id="fontPreviewText">who is on the toilet?</span>
+		</div>
+			
+		<button id="button">
+			Get poopin' !
+		</button>
+		
+		<script>
+			if(localStorage.getItem("userSettings")){
+				location.pathname = "/overview/";	
+			}
+			
+			var knap = document.querySelector("#button");
+			var usernameField = document.querySelector("input[name=username]");
+			var fontSelector = document.querySelector("select[name=font-selector]");
+			var usernameDisplay = document.querySelector("#usernameDisplay");
+			var fontPreview = document.querySelector(".font-preview");
+			var fontPreviewText = document.querySelector("#fontPreviewText");
+			
+			knap.addEventListener("click", function(){
+				var username = usernameField.value;
+				
+				if(username){
+				localStorage.setItem("userSettings", JSON.stringify({
+					username: usernameField.value, 
+					font: fontSelector.value
+				}));
+					location.pathname = "/overview/"
+				}
+				else{
+					alert("Please select a name");
+				}
+				
+			});
+			
+			fontPreview.setAttribute("style", "font-family:" + fontSelector[0].value)
+			
+			for(i = 0; i < fontSelector.length ;i++){
+				var option = fontSelector[i];
+				option.innerText = option.value;
+	
+			}
+			
+			usernameField.addEventListener("keyup", function(){
+				var username = usernameField.value;
+				
+				if(username){
+					fontPreviewText.innerText = username + " is on the toilet";
+				}
+				else{
+					fontPreviewText.innerText = "who is on the toilet?";
+				}
+			})
+			
+			fontSelector.addEventListener("change", function(){
+				fontPreview.setAttribute("style","font-family: '" + fontSelector.value + "';");
+			})
+
+		</script>
+	
+        <div>
+			Todo:
+			<ul>
+				<li>
+					Hvis du ikke har en bruger
+					<ol>
+						<li>Skriv navn: hvad skal vi kalde dig?</li>
+						<li>Vælg skrifttype du vil bruge</li>
+					</ol>
+				</li>
+				<li>
+					Hvis du har en bruger
+					<ol>
+						<li>Send videre til oversigts-siden /overview/</li>
+					</ol>
+				</li>
+			</ul>
+		</div>
     </body>
 </html>

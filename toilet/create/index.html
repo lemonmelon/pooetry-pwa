@@ -36,7 +36,7 @@
 			var toiletCatLog = toiletCategoryLog.value;
 			
 			navigator.geolocation.getCurrentPosition(function(position) {
-				fetch("0.0.0.0:1234/toilets", {
+				fetch("https://pooetry-api.herokuapp.com/toilets", {
 					method: "POST",
 					body: JSON.stringify({
 						name: toiletName,
@@ -45,9 +45,10 @@
 						longitude: position.coords.longitude
 					}),
 					headers: {"Content-Type":"application/json"}
-				}).then (function(response){
-					var data = response.json();
-					document.location.pathname = "/toilet/?id=" + data.id;
+				}).then(function(response){
+					response.json().then((data) => {
+					    document.location.href = "/toilet/?id=" + data.id;
+                    });
 				}).catch (function(error){
 					console.error ("Failed to create toilet '" + toiletName + "'", error);
 				});
@@ -56,6 +57,7 @@
 			
 		})
 		</script>
+
 	
 	
 	
@@ -75,5 +77,6 @@
             	</li>
         	</ul>
 		</div>
+
     </body>
 </html>
